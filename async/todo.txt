@@ -1,0 +1,20 @@
+ASync 1.0
+-----------
+1.	[x]		Do for web
+2.	[x]		Add POST
+3.	[ ]		Add JavaDoc
+4.	[ ]		Add docs
+5.	[ ]		Add Readme
+
+ASync 1.1
+-----------
+1.	[ ]		Add support for cookie
+2.	[ ]		Add support for cookie session
+3.	[ ]		Timer to socket.
+4.	[ ]		Add pre hook on dispatcher. Used for checking in data before sending to other clients.
+
+ASync 1.2
+-----------
+1.	[ ]		Add support for HTTP/1.1
+	[ ]		Connection keep alive
+

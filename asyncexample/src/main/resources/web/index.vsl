@@ -1,0 +1,11 @@
+<html>
+<body>
+	<h1>Guestbook</h1>
+	${info}
+	<form action="" method="post" accept-charset="UTF-8">
+		Name<br /> <input type="text" name="name"><br /> Text<br />
+		<textarea name="text"></textarea>
+		<br /> <br /> <input type="submit" value="Add">
+	</form>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.github.podal.async</groupId>
+	<artifactId>asyncbase</artifactId>
+	<packaging>pom</packaging>
+	<version>1.0.0-SNAPSHOT</version>
+	<name>Asynchronous tools Base</name>
+	<properties>
+		<compileSource>1.6</compileSource>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<downloadSources>true</downloadSources>
+	</properties>
+	<modules>
+		<module>async</module>
+		<module>asyncexample</module>
+		<module>asyncpage</module>
+		<module>asyncdefault</module>
+	</modules>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.8</version>
+				<configuration>
+					<wtpversion>2.0</wtpversion>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.7.1</version>
+				<configuration>
+					<excludes>
+						<exclude>**/*IT.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<rulesets>
+						<ruleset>.ruleset</ruleset>
+						<!--ruleset>/rulesets/naming.xml</ruleset -->
+					</rulesets>
+					<targetJdk>1.6</targetJdk>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<configLocation>checkstyle.xml</configLocation>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+</project>
