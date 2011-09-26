@@ -4,18 +4,18 @@ communication: Socket, Console and Web.
 
 ##Get starting
 add following in your pom.xml
-<project>
-...
-	<dependencies>
-		...
-		<dependency>
-			<groupId>com.github.podal.async</groupId>
-			<artifactId>asyncdefault</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		...
-	</dependencies
-</project>
+	<project>
+	...
+		<dependencies>
+			...
+			<dependency>
+				<groupId>com.github.podal.async</groupId>
+				<artifactId>asyncdefault</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+			...
+		</dependencies
+	</project>
 
 and
 
