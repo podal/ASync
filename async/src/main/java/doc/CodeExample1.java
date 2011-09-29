@@ -44,9 +44,9 @@ public class CodeExample1 {
 				String line;
 				while ((line = reader.readLine()) != null) {
 					writer.write(new StringBuffer(line).reverse().toString());
-					writer.flush();
+					writer.flush();// Force a flush if stream is buffered.
 				}
-			}
+			}// socket will be closed "automatically" (since out of scope)
 		});
 		remotes.add(remote);
 	}
@@ -80,12 +80,11 @@ public class CodeExample1 {
 		new ASync().socket().connectTo("127.0.0.1", 12345, new IOCallback() {
 			public void call(InputStream in, OutputStream out) throws IOException {
 				out.write("ASync\n".getBytes());
-				// Streams can be buffered.
-				out.flush();
+				out.flush();// Force a flush if stream is buffered.
 				inBytes = new byte[1024];
 				// read just one chunk.
 				inLen = in.read(inBytes);
-			}
+			}// socket will be closed "automatically" (since out of scope)
 		});
 	}
 
@@ -95,9 +94,8 @@ public class CodeExample1 {
 				byte[] bs = new byte[1024];
 				int a;
 				while ((a = in.read(bs)) != -1) {
-					out.write(bs, 0, a);
-					// Streams can be buffered.
-					out.flush();
+					out.write(bs, 0, a);				
+					out.flush();// Force a flush if stream is buffered. 
 				}
 			}
 		});

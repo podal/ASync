@@ -3,6 +3,10 @@ ASync is asyncronius library to deal with asyncrone
 communication: Socket, Console and Web.
 
 ##Get starting
+Checkout code and run
+
+	mvn clean install
+
 add following in your pom.xml
 
 	<project>
@@ -12,7 +16,7 @@ add following in your pom.xml
 			<dependency>
 				<groupId>com.github.podal.async</groupId>
 				<artifactId>asyncdefault</artifactId>
-				<version>1.0.0</version>
+				<version>1.0.0-SNAPSHOT</version>
 			</dependency>
 			...
 		</dependencies

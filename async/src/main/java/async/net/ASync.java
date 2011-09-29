@@ -11,122 +11,93 @@ import async.net.thread.OneServiceThreadHandler;
 import async.net.thread.ThreadHandler;
 
 /**
- * <h1>ASync</h1> ASync is asyncronius library to deal with asyncrone
- * communication: Socket, Console and Web. <h2>Content</h2>
+ * <h1>ASync</h1>
  * <p>
- * <h3><a href="#1">1. Console</a></h3>
- * <b> <a href="#1.1">1.1. Use console</a><br/>
- * </b>
- * <h3><a href="#2">2. Socket</a></h3>
- * <b> <a href="#2.1">2.1. Connect to a socket</a><br/>
- * <a href="#2.2">2.2. Start a responding socket</a><br/>
- * <a href="#2.3">2.3. Connect to a socket and copy all to and from console</a><br/>
- * <a href="#2.4">2.4. Chat server</a><br/>
- * </b>
- * <h3><a href="#3">3. WebServer</a></h3>
- * <b> <a href="#3.1">3.1. Start a WebServer</a><br/>
- * <a href="#3.2">3.2. Make a guest book</a><br/>
- * </b>
- * <h3><a href="#4">4. Exceptions</a></h3>
- * <h3><a href="#5">5. Exist hooks</a></h3>
- * <h3><a href="#6">6. Threads</a></h3>
+ * ASync is an asynchronous library to handle asynchronous communication over
+ * sockets, console and web. It provides an easy to use interface, simplifying
+ * the work that needs to be done. All connection types (socket/console/web)
+ * uses a similar approach, making it easy to switch between them.
  * </p>
  * 
- * <h2 id="1">Console</h2> <h3 id="1.1">1.1. Use console</h3> Send back the
- * entered characters.
+ * <p>
+ * The purpose of ASync is to simplify a tedious task, and to make it swifter to
+ * develop debugging interfaces.
+ * </p>
+ * 
+ * <p>
+ * The ASync library uses the Factory design pattern, among others.
+ * </p>
+ * <p>
+ * <h3><a href="#1">1. Short Example</a></h3>
+ * <h3><a href="#2">2. Dispatcher</a></h3>
+ * <h3><a href="#3">3. Exceptions</a></h3>
+ * <h3><a href="#4">4. Exist hooks</a></h3>
+ * <h3><a href="#6">5. Threads</a></h3>
+ * </p>
+ * 
+ * <h2 id="1">Short Example</h2>
+ * <p>
+ * Code says it all. Short snippets as example.
+ * </p>
+ * 
+ * <b>Console</b>
  * 
  * <pre>
- * <!--Code start[doc.CodeExample1.startReverseConsole] [783D6FCEAEDEE90C28C0ADE9262028B5]-->
+ * <!--Code start[doc.CodeExample1.startReverseConsole] [A74C90995C44CE6520B78B984C3105B6]-->
  * 		new ASync().console().start(new IOCallback() {
  * 			public void call(InputStream in, OutputStream out) throws IOException {
  * 				byte[] bs = new byte[1024];
  * 				int a;
  * 				while ((a = in.read(bs)) != -1) {
- * 					out.write(bs, 0, a);
- * 					// Streams can be buffered.
- * 					out.flush();
+ * 					out.write(bs, 0, a);				
+ * 					out.flush();// Force a flush if stream is buffered. 
  * 				}
  * 			}
  * 		});
  * <!--Code end-->
  * </pre>
  * 
- * We use an IOCallback and listening on input stream and send it to output
- * stream. <h2 id="2">Socket</h2> <h3 id="2.1">2.1. Connect to a socket</h3>
- * Connect to a socket and writes 'ASync' and prints the result to the StdOut.
+ * <b>Connect to socket</b>
  * 
  * <pre>
- * <!--Code start[doc.CodeExample1.startClient] [6E34EFCE8F520D5AD3991A6F4CCA22A2]-->
+ * <!--Code start[doc.CodeExample1.startClient] [B69DC5984FA07168B02F7C67EDF15293]-->
  * 		new ASync().socket().connectTo("127.0.0.1", 12345, new IOCallback() {
  * 			public void call(InputStream in, OutputStream out) throws IOException {
  * 				out.write("ASync\n".getBytes());
- * 				// Streams can be buffered.
- * 				out.flush();
+ * 				out.flush();// Force a flush if stream is buffered.
  * 				inBytes = new byte[1024];
  * 				// read just one chunk.
  * 				inLen = in.read(inBytes);
- * 			}
+ * 			}// socket will be closed "automatically" (since out of scope)
  * 		});
  * <!--Code end-->
  * </pre>
  * 
- * Opens a socket and do the work and then close it.
- * 
- * <h3 id="2.2">2.2. Connect to a socket</h3> Start a server socket and send the
- * fetched text back in reverse order.<br/>
- * Instead of using IOCallback we use BufferedCharacterCallback witch extends
- * CharacterCallback that implements IOCallback and we have a buffered Writer
- * and reader.
+ * <b>Listen on a Socket</b>
  * 
  * <pre>
- * <!--Code start[doc.CodeExample1.startServer] [4401C53B7EC0FE1CA7F40C94193F3E12]-->
+ * <!--Code start[doc.CodeExample1.startServer] [2F919828A8657BC8D663694B0E164421]-->
  * 		// This creates a RemoteControll. To stop use remote.stop();
  * 		RemoteControll remote = new ASync().socket().listenOn(12345, new BufferedCharacterCallback("UTF-8") {
  * 			public void call(BufferedReader reader, BufferedWriter writer) throws IOException {
  * 				String line;
  * 				while ((line = reader.readLine()) != null) {
  * 					writer.write(new StringBuffer(line).reverse().toString());
- * 					writer.flush();
+ * 					writer.flush();// Force a flush if stream is buffered.
  * 				}
- * 			}
+ * 			}// socket will be closed "automatically" (since out of scope)
  * 		});
  * 		remotes.add(remote);
  * <!--Code end-->
  * </pre>
  * 
- * When exit the call method all resources are cleaned. <h3 id="2.3">2.3.
- * Connect to a socket and copy all to and from console</h3>
+ * <p>
+ * Instead of using IOCallback we use BufferedCharacterCallback witch extends
+ * CharacterCallback that implements IOCallback and we have a buffered Writer
+ * and reader.
+ * </p>
  * 
- * <pre>
- * <!--Code start[doc.CodeExample1.startConsole] [177545C5BC22BBAF830C8EF1A50B3779]-->
- * 		ASync aSync = new ASync();
- * 		Dispatcher dispatcher = aSync.createDispatcher();
- * 		aSync.console().start(dispatcher.createCallback());
- * 		aSync.socket().connectTo("127.0.0.1", 12346, dispatcher.createCallback());
- * <!--Code end-->
- * </pre>
- * 
- * Now we introduce a Dispatcher. Dispatcher is a controller that listen on
- * inputStreams from all added callbacks and propagets it to all other
- * outputStreams. We add a callback in console and socket.
- * 
- * <h3 id="2.4">2.4. Chat server</h3> Starts a chat server that copying all
- * information that one client sends to all other clients.
- * 
- * <pre>
- * <!--Code start[doc.CodeExample1.startChatServer] [59DF404164DA7FDDB20264F9573AD08A]-->
- * 		ASync aSync = new ASync();
- * 		Dispatcher dispatcher = aSync.createDispatcher();
- * 		remotes.add(aSync.socket().listenOn(12346, dispatcher.createFactory()));
- * <!--Code end-->
- * </pre>
- * 
- * We use Dispatcher to dispatch requests. Now we use createFactory method and
- * that will create a new IOCallback for every request. When connecting to a
- * socket or console <code>IOCallback.call</code> method is only called ones and
- * when listening on a socket <code>IOCallback.call</code> method is called for
- * each request therefore we need a factory that creates new IOCallbacks for
- * each call. <h2 id="3">3. WebServer</h2><h3 id="3.1">3.1. Start a WebServer</h3>
+ * <b>Start web server</b>
  * 
  * <pre>
  * <!--Code start[doc.CodeExample1.startWebServer] [51B253AC00EA458B0784E935F9588BC0]-->
@@ -142,12 +113,40 @@ import async.net.thread.ThreadHandler;
  * <!--Code end-->
  * </pre>
  * 
- * Starts a WebServer. On a request it return path and query string as result.
- * <h3 id="3.2">3.2. Make a guest book</h3>
+ * <h2 id="2">Dispatcher</h2> Dispatcher is used to dispatch requests.
+ * Dispatcher is a controller that listen on inputStreams from all added
+ * callbacks and propagets it to all other outputStreams. We add a callback in
+ * console and socket.
+ * 
+ * <b>Connect console to a Socket</b>
+ * 
+ * <pre>
+ * <!--Code start[doc.CodeExample1.startConsole] [177545C5BC22BBAF830C8EF1A50B3779]-->
+ * 		ASync aSync = new ASync();
+ * 		Dispatcher dispatcher = aSync.createDispatcher();
+ * 		aSync.console().start(dispatcher.createCallback());
+ * 		aSync.socket().connectTo("127.0.0.1", 12346, dispatcher.createCallback());
+ * <!--Code end-->
+ * </pre>
+ * 
+ * <b>Connect connection to all other connection(Simple chat server)</b>
+ * 
+ * <pre>
+ * <!--Code start[doc.CodeExample1.startChatServer] [59DF404164DA7FDDB20264F9573AD08A]-->
+ * 		ASync aSync = new ASync();
+ * 		Dispatcher dispatcher = aSync.createDispatcher();
+ * 		remotes.add(aSync.socket().listenOn(12346, dispatcher.createFactory()));
+ * <!--Code end-->
+ * </pre>
+ * 
  * <p>
- * <a href="page.html">See extension: <b>Page</b></a>
- * <p>
- * <h2 id="4">4. Exceptions</h2>
+ * Now we use createFactory method and that will create a new IOCallback for
+ * every request. When connecting to a socket or console
+ * <code>IOCallback.call</code> method is only called ones and when listening on
+ * a socket <code>IOCallback.call</code> method is called for each request
+ * therefore we need a factory that creates new IOCallbacks.
+ * </p>
+ * <h2 id="3">3. Exceptions</h2>
  * <p>
  * In ASync there are two types of exceptions that can be thrown. One when
  * starting of a resource(Socket, ServerSocket and WebServer) and one that can
@@ -176,7 +175,7 @@ import async.net.thread.ThreadHandler;
  * <!--Code end-->
  * </pre>
  * 
- * <h2 id="5">5. Exist hooks on Dispatcher</h2>
+ * <h2 id="4">4. Exist hooks on Dispatcher</h2>
  * <p>
  * To create a exit hook on on a dispatcher callback you just add a
  * ExitCallback. Method onExit is called when call in callback has exit.
@@ -194,10 +193,11 @@ import async.net.thread.ThreadHandler;
  * 		}));
  * <!--Code end-->
  * </pre>
+ * 
  * <p>
  * This exit hook exit the program when socket has ended.
  * </p>
- * <h2 id="6">6. Threads</h2>
+ * <h2 id="5">5. Threads</h2>
  * <p>
  * By default <code>Executors.newCachedThreadPool()</code> is used, however you
  * can customise witch ExecutorService ASync uses by adding ExecutorService.
@@ -210,6 +210,7 @@ import async.net.thread.ThreadHandler;
  * 		aSync.console().start(myIoCallback);
  * <!--Code end-->
  * </pre>
+ * 
  * <p>
  * Example above uses same service for all type of recourses, to specify
  * different service for different recourses use ThreadHandler.
@@ -272,14 +273,14 @@ public final class ASync {
 	 * @see ASyncSocket
 	 */
 	public ASyncSocket socket() {
-		return factory.createASyncSocket(handler,address, exceptionCallback);
+		return factory.createASyncSocket(handler, address, exceptionCallback);
 	}
 
 	/**
 	 * @see ASyncHttp
 	 */
 	public ASyncHttp http() {
-		return factory.createASyncHttp(this,address);
+		return factory.createASyncHttp(this, address);
 	}
 
 	/**
