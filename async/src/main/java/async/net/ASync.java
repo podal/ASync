@@ -113,10 +113,12 @@ import async.net.thread.ThreadHandler;
  * <!--Code end-->
  * </pre>
  * 
- * <h2 id="2">Dispatcher</h2> Dispatcher is used to dispatch requests.
- * Dispatcher is a controller that listen on inputStreams from all added
- * callbacks and propagets it to all other outputStreams. We add a callback in
- * console and socket.
+ * <h2 id="2">Dispatcher</h2>
+ * <p>
+ * Dispatcher is used to dispatch requests. Dispatcher is a controller that
+ * listen on inputStreams from all added callbacks and propagets it to all other
+ * outputStreams.
+ * </p>
  * 
  * <b>Connect console to a Socket</b>
  * 
