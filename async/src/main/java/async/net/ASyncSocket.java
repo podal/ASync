@@ -20,7 +20,7 @@ import async.net.callback.IOCallback;
  */
 public interface ASyncSocket {
 
-	public RemoteControll listenOn(int port, IOCallback ioCallback) throws IOException;
+	public RemoteControl listenOn(int port, IOCallback ioCallback) throws IOException;
 
 	public void connectTo(String host, int port, IOCallback ioCallback) throws IOException;
 

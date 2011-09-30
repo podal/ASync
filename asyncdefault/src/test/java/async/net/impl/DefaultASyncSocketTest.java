@@ -7,8 +7,6 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 
-import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -49,7 +47,7 @@ public class DefaultASyncSocketTest {
 		verify(handler).getExecutorService(ASyncType.SOCKET_CONNECT);
 		ArgumentCaptor<ConncetToRun> captor = ArgumentCaptor.forClass(ConncetToRun.class);
 		verify(service).execute(captor.capture());
-		ConncetToRun value = captor.getValue();
+		captor.getValue();
 	}
 
 	@Test

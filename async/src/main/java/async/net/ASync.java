@@ -28,14 +28,14 @@ import async.net.thread.ThreadHandler;
  * The ASync library uses the Factory design pattern, among others.
  * </p>
  * <p>
- * <h3><a href="#1">1. Short Example</a></h3>
+ * <h3><a href="#1">1. Short examples</a></h3>
  * <h3><a href="#2">2. Dispatcher</a></h3>
+ * <h4>&nbsp;<a href="#2.1">2.1. Exist hooks</a></h4>
  * <h3><a href="#3">3. Exceptions</a></h3>
- * <h3><a href="#4">4. Exist hooks</a></h3>
- * <h3><a href="#6">5. Threads</a></h3>
+ * <h3><a href="#4">4. Threads</a></h3>
  * </p>
  * 
- * <h2 id="1">Short Example</h2>
+ * <h2 id="1">Short examples</h2>
  * <p>
  * Some short examples to illustrate how to use the different interfaces of the
  * ASync library.
@@ -62,10 +62,10 @@ import async.net.thread.ThreadHandler;
  * <b>Connect to socket</b>
  * 
  * <pre>
- * <!--Code start[doc.CodeExample1.startClient] [6483EB12629361B9D333F35FDA6003FF]-->
+ * <!--Code start[doc.CodeExample1.startClient] [D9B707856BA81F3907F4A59329D9F360]-->
  * 		new ASync().socket().connectTo("127.0.0.1", 12345, new IOCallback() {// Connect to host 127.0.0.1 on port 12345
  * 			public void call(InputStream in, OutputStream out) throws IOException {
- * 				// This is just nonsens example code
+ * 				// This is just nonsense example code
  * 				out.write("ASync\n".getBytes());//Sends a "ASync" to server
  * 				out.flush();// Force a flush if stream is buffered.
  * 				inBytes = new byte[1024];
@@ -80,14 +80,14 @@ import async.net.thread.ThreadHandler;
  * <b>Listen on a socket</b>
  * 
  * <pre>
- * <!--Code start[doc.CodeExample1.startServer] [E1E4A5F5AE3F5A92FBF907EC8CBB88AA]-->
- * 		// This creates a RemoteControll. To stop use remote.stop();
- * 		RemoteControll remote = new ASync().socket().listenOn(12345,//Start listening on socket. RemoteControl makes it posible from oustide of ASync API to monitoring and close down service
+ * <!--Code start[doc.CodeExample1.startServer] [2BCB90DCDD7EEC8FFEF1A568F6A3386F]-->
+ * 		// This creates a RemoteControl. To stop use remote.stop();
+ * 		RemoteControl remote = new ASync().socket().listenOn(12345,//Start listening on socket. RemoteControl makes it possible from outside of ASync API to monitoring and close down service
  * 				new BufferedCharacterCallback("UTF-8") {
  * 			public void call(BufferedReader reader, BufferedWriter writer) throws IOException {
  * 				String line;
  * 				while ((line = reader.readLine()) != null) {//Read a line
- * 					writer.write(new StringBuffer(line).reverse().toString());//Send the readed line back to client
+ * 					writer.write(new StringBuffer(line).reverse().toString());//Send the read line back to client
  * 					writer.flush();// Force a flush if stream is buffered.
  * 				}
  * 			}// socket will be closed "automatically" (since out of scope)
@@ -97,8 +97,8 @@ import async.net.thread.ThreadHandler;
  * </pre>
  * 
  * <p>
- * When starting a listener or a webserver it return a remote controll. It's
- * used to check status of listener/webserver or close it.
+ * When starting a listener or a webserver it return a remote control. It's used
+ * to check status of listener/webserver or close it.
  * </p>
  * <p>
  * In this example BufferedCharacterCallback is used. Thats a type of IOCallback
@@ -108,10 +108,10 @@ import async.net.thread.ThreadHandler;
  * <b>Start web server</b>
  * 
  * <pre>
- * <!--Code start[doc.CodeExample1.startWebServer] [EB6DF761EA0D51AA67C26E00534D7AA1]-->
+ * <!--Code start[doc.CodeExample1.startWebServer] [257A2A072787C8F45A9D5EA447505F21]-->
  * 		new ASync().http().listen(12347, new HttpCallback() {// Start a web server that listening on port 12347
  * 			public void call(HttpRequest request, HttpResponse response) throws IOException {
- * 				// This is just nonsens example code
+ * 				// This is just nonsense example code
  * 				ASyncWriter writer = response.getWriter();// Get a writer to response client.
  * 				writer.write(request.getPath());// Get requested path and send it to client.
  * 				writer.write(" ");
@@ -126,7 +126,7 @@ import async.net.thread.ThreadHandler;
  * 
  * </p>
  * 
- * <h2 id="2">Dispatcher</h2>
+ * <h2 id="2">2. Dispatcher</h2>
  * <p>
  * The Dispatcher is used to dispatch requests. A dispatcher is a controller
  * that listen on inputStreams from all added callbacks and propagaters it to
@@ -167,12 +167,34 @@ import async.net.thread.ThreadHandler;
  * <code>IOCallback.call</code> is called for each request. Because of this, a
  * factory is needed that creates new IOCallback for each new call.
  * </p>
+ * <h3 id="2.1">2.1. Exist hooks on Dispatcher</h3>
+ * <p>
+ * Exit hook is called when a dispatchers IOCallback has exit. Thats can be used
+ * for writing a message or exit a program when a recource has closed down. To
+ * create a exit hook on on a dispatcher callback you just add a ExitCallback.
+ * </p>
+ * 
+ * <pre>
+ * <!--Code start[doc.CodeExample1.exitHock] [888ABB27B8DC212B572F3668DFAC751D]-->
+ * 		ASync aSync = new ASync();
+ * 		Dispatcher dispatcher = aSync.createDispatcher();
+ * 		aSync.console().start(dispatcher.createCallback());
+ * 		aSync.socket().connectTo("127.0.0.1", 12346, dispatcher.createCallback(new ExitCallback() {
+ * 			public void onExit() {//called when socket has close
+ * 				System.exit(0);
+ * 			}
+ * 		}));
+ * <!--Code end-->
+ * </pre>
+ * 
  * <h2 id="3">3. Exceptions</h2>
  * <p>
- * In ASync there are two types of exceptions that can be thrown. One when
- * starting of a resource(Socket, ServerSocket and WebServer) and one that can
- * be thrown when a service is operating such as problem with communication or
- * start a client connection.
+ * In ASync library there are two types of exceptions:
+ * <ul>
+ * <li>Problem when starting of a resource(Socket, ServerSocket and WebServer)</li>
+ * <li>Problem when a service is operating such as problem with communication or
+ * start a client connection.</li>
+ * </ul>
  * </p>
  * <p>
  * The first one when starting a resource is a checked exception and will be
@@ -196,32 +218,10 @@ import async.net.thread.ThreadHandler;
  * <!--Code end-->
  * </pre>
  * 
- * <h2 id="4">4. Exist hooks on Dispatcher</h2>
- * <p>
- * To create a exit hook on on a dispatcher callback you just add a
- * ExitCallback. Method onExit is called when call in callback has exit.
- * </p>
- * 
- * <pre>
- * <!--Code start[doc.CodeExample1.exitHock] [23D7C8BE7B96C391189890CA2BB8E79E]-->
- * 		ASync aSync = new ASync();
- * 		Dispatcher dispatcher = aSync.createDispatcher();
- * 		aSync.console().start(dispatcher.createCallback());
- * 		aSync.socket().connectTo("127.0.0.1", 12346, dispatcher.createCallback(new ExitCallback() {
- * 			public void onExit() {
- * 				System.exit(0);
- * 			}
- * 		}));
- * <!--Code end-->
- * </pre>
- * 
- * <p>
- * This exit hook exit the program when socket has ended.
- * </p>
- * <h2 id="5">5. Threads</h2>
+ * <h2 id="4">4. Threads</h2>
  * <p>
  * By default <code>Executors.newCachedThreadPool()</code> is used, however you
- * can customise witch ExecutorService ASync uses by adding ExecutorService.
+ * can customize witch ExecutorService ASync uses by adding ExecutorService.
  * </p>
  * 
  * <pre>

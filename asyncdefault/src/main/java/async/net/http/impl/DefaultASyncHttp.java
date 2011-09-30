@@ -6,7 +6,7 @@ import java.io.OutputStream;
 
 import async.net.ASync;
 import async.net.ASyncHttp;
-import async.net.RemoteControll;
+import async.net.RemoteControl;
 import async.net.callback.HttpCallback;
 import async.net.callback.IOCallback;
 
@@ -19,8 +19,8 @@ public class DefaultASyncHttp implements ASyncHttp {
 	}
 
 	@Override
-	public RemoteControll listen(int port, final HttpCallback callback) throws IOException {
-		RemoteControll remote = aSync.socket().listenOn(port, new IOCallback() {
+	public RemoteControl listen(int port, final HttpCallback callback) throws IOException {
+		RemoteControl remote = aSync.socket().listenOn(port, new IOCallback() {
 			@Override
 			public void call(InputStream in, OutputStream out) throws IOException {
 				DefaulHttpResponse out2 = new DefaulHttpResponse(out);

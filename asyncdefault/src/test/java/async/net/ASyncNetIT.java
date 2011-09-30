@@ -16,7 +16,7 @@ import org.junit.Test;
 import async.net.callback.IOCallback;
 
 public class ASyncNetIT {
-	private RemoteControll controll;
+	private RemoteControl controll;
 
 	@Test
 	public void testSocket() throws InterruptedException, IOException {

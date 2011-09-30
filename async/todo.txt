@@ -2,9 +2,9 @@ ASync 1.0
 -----------
 1.	[x]		Do for web
 2.	[x]		Add POST
-3.	[ ]		Add JavaDoc
-4.	[ ]		Add docs
-5.	[ ]		Add Readme
+3.	[x]		Add JavaDoc
+4.	[x]		Add docs
+5.	[x]		Add Readme
 
 ASync 1.1
 -----------

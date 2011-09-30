@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 
 import async.net.ASync;
 import async.net.ASyncType;
-import async.net.RemoteControll;
+import async.net.RemoteControl;
 import async.net.callback.BufferedCharacterCallback;
 import async.net.callback.Dispatcher;
 import async.net.callback.ExceptionCallback;
@@ -33,18 +33,18 @@ import async.net.thread.ThreadHandler;
 public class CodeExample1 {
 	int inLen;
 	byte[] inBytes;
-	private List<RemoteControll> remotes = new ArrayList<RemoteControll>();
+	private List<RemoteControl> remotes = new ArrayList<RemoteControl>();
 	private IOCallback myIoCallback;
 	private ExecutorService myExecutorService;
 
 	private void startServer() throws IOException {
-		// This creates a RemoteControll. To stop use remote.stop();
-		RemoteControll remote = new ASync().socket().listenOn(12345,//Start listening on socket. RemoteControl makes it posible from oustide of ASync API to monitoring and close down service
+		// This creates a RemoteControl. To stop use remote.stop();
+		RemoteControl remote = new ASync().socket().listenOn(12345,//Start listening on socket. RemoteControl makes it possible from outside of ASync API to monitoring and close down service
 				new BufferedCharacterCallback("UTF-8") {
 			public void call(BufferedReader reader, BufferedWriter writer) throws IOException {
 				String line;
 				while ((line = reader.readLine()) != null) {//Read a line
-					writer.write(new StringBuffer(line).reverse().toString());//Send the readed line back to client
+					writer.write(new StringBuffer(line).reverse().toString());//Send the read line back to client
 					writer.flush();// Force a flush if stream is buffered.
 				}
 			}// socket will be closed "automatically" (since out of scope)
@@ -80,7 +80,7 @@ public class CodeExample1 {
 	private void startClient() throws IOException {
 		new ASync().socket().connectTo("127.0.0.1", 12345, new IOCallback() {// Connect to host 127.0.0.1 on port 12345
 			public void call(InputStream in, OutputStream out) throws IOException {
-				// This is just nonsens example code
+				// This is just nonsense example code
 				out.write("ASync\n".getBytes());//Sends a "ASync" to server
 				out.flush();// Force a flush if stream is buffered.
 				inBytes = new byte[1024];
@@ -106,7 +106,7 @@ public class CodeExample1 {
 	}
 
 	private void stop() {
-		for (RemoteControll remote : remotes) {
+		for (RemoteControl remote : remotes) {
 			try {
 				remote.stop();
 			} catch (Exception e) {
@@ -118,7 +118,7 @@ public class CodeExample1 {
 	public void startWebServer() throws IOException {
 		new ASync().http().listen(12347, new HttpCallback() {// Start a web server that listening on port 12347
 			public void call(HttpRequest request, HttpResponse response) throws IOException {
-				// This is just nonsens example code
+				// This is just nonsense example code
 				ASyncWriter writer = response.getWriter();// Get a writer to response client.
 				writer.write(request.getPath());// Get requested path and send it to client.
 				writer.write(" ");
@@ -141,7 +141,7 @@ public class CodeExample1 {
 		Dispatcher dispatcher = aSync.createDispatcher();
 		aSync.console().start(dispatcher.createCallback());
 		aSync.socket().connectTo("127.0.0.1", 12346, dispatcher.createCallback(new ExitCallback() {
-			public void onExit() {
+			public void onExit() {//called when socket has close
 				System.exit(0);
 			}
 		}));

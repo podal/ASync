@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutorService;
 
 import async.net.ASyncSocket;
 import async.net.ASyncType;
-import async.net.RemoteControll;
+import async.net.RemoteControl;
 import async.net.callback.ExceptionCallback;
 import async.net.callback.IOCallback;
 import async.net.socket.ServerSocket;
@@ -31,7 +31,7 @@ public class DefaultASyncSocket implements ASyncSocket {
 	}
 
 	@Override
-	public RemoteControll listenOn(int port, IOCallback ioCallback)
+	public RemoteControl listenOn(int port, IOCallback ioCallback)
 			throws IOException {
 		final ExecutorService executorService = handler.getExecutorService(ASyncType.SOCKET_LISTEN);
 		final ExecutorService executorServiceConnect = handler.getExecutorService(ASyncType.SOCKET_LISTEN_CONNECT);

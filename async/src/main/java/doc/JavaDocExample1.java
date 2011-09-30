@@ -8,7 +8,7 @@ import async.net.ASync;
 import async.net.ASyncConsol;
 import async.net.ASyncHttp;
 import async.net.ASyncSocket;
-import async.net.RemoteControll;
+import async.net.RemoteControl;
 import async.net.callback.HttpCallback;
 import async.net.callback.IOCallback;
 import async.net.http.HttpRequest;
@@ -46,7 +46,7 @@ public class JavaDocExample1 {
 
 	public void remote() throws IOException {
 		ASyncHttp http = new ASync().http();
-		RemoteControll remote = http.listen(8080, httpCallback);
+		RemoteControl remote = http.listen(8080, httpCallback);
 		if (remote.isActive()) {
 			remote.stop();
 		}

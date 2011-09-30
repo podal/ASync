@@ -20,6 +20,6 @@ import async.net.callback.HttpCallback;
  */
 public interface ASyncHttp {
 
-	RemoteControll listen(int port, HttpCallback callback) throws IOException;
+	RemoteControl listen(int port, HttpCallback callback) throws IOException;
 
 }

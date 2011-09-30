@@ -58,8 +58,8 @@ public abstract class PostParameterFetcher extends OutputStream {
 	public void close() throws IOException {
 		if (key.size() + value.size() != 0) {
 			flushParam();
-			requestFinish();
 		}
+		requestFinish();
 	}
 
 	public abstract void requestFinish();

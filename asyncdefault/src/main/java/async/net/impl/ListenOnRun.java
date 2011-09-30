@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import async.net.RemoteControll;
+import async.net.RemoteControl;
 import async.net.callback.ExceptionCallback;
 import async.net.callback.IOCallback;
 import async.net.socket.ServerSocket;
 import async.net.socket.Socket;
 
-public class ListenOnRun implements Runnable, RemoteControll {
+public class ListenOnRun implements Runnable, RemoteControl {
 
 	private ServerSocket serverSocket;
 	private IOCallback ioCallback;
