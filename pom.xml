@@ -15,9 +15,9 @@
 	<url>https://github.com/podal/asyncc</url>
 
 	<scm>
-		<connection>scm:git:git@github.com:podal/async.git</connection>
-		<developerConnection>scm:git:git@github.com:podal/async.git</developerConnection>
-		<url>git@github.com:podal/async.git</url>
+		<connection>scm:git:git@github.com:podal/ASync.git</connection>
+		<developerConnection>scm:git:git@github.com:podal/ASync.git</developerConnection>
+		<url>git@github.com:podal/ASync.git</url>
 	</scm>
 
 	<licenses>
