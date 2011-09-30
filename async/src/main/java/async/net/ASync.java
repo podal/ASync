@@ -15,8 +15,8 @@ import async.net.thread.ThreadHandler;
  * <p>
  * ASync is an asynchronous library to handle asynchronous communication over
  * sockets, console and web. It provides an easy to use interface, simplifying
- * the work that needs to be done. All connection types (socket/console/web)
- * uses a similar approach, making it easy to switch between them.
+ * the work that needs to be done. All connection types (socket/console/web) use
+ * a similar approach, making it easy to switch between them.
  * </p>
  * 
  * <p>
@@ -37,17 +37,19 @@ import async.net.thread.ThreadHandler;
  * 
  * <h2 id="1">Short Example</h2>
  * <p>
- * Code says it all. Short snippets as example.
+ * Some short examples to illustrate how to use the different interfaces of the
+ * ASync library.
  * </p>
  * 
  * <b>Console</b>
  * 
  * <pre>
- * <!--Code start[doc.CodeExample1.startReverseConsole] [A74C90995C44CE6520B78B984C3105B6]-->
- * 		new ASync().console().start(new IOCallback() {
+ * <!--Code start[doc.CodeExample1.startReverseConsole] [F25775CAEB33B2EF26714CB49B8A8864]-->
+ * 		new ASync().console().start(new IOCallback() {//Create new console
  * 			public void call(InputStream in, OutputStream out) throws IOException {
  * 				byte[] bs = new byte[1024];
  * 				int a;
+ * 				//Get data from console input and send it to console output.
  * 				while ((a = in.read(bs)) != -1) {
  * 					out.write(bs, 0, a);				
  * 					out.flush();// Force a flush if stream is buffered. 
@@ -60,29 +62,32 @@ import async.net.thread.ThreadHandler;
  * <b>Connect to socket</b>
  * 
  * <pre>
- * <!--Code start[doc.CodeExample1.startClient] [B69DC5984FA07168B02F7C67EDF15293]-->
- * 		new ASync().socket().connectTo("127.0.0.1", 12345, new IOCallback() {
+ * <!--Code start[doc.CodeExample1.startClient] [6483EB12629361B9D333F35FDA6003FF]-->
+ * 		new ASync().socket().connectTo("127.0.0.1", 12345, new IOCallback() {// Connect to host 127.0.0.1 on port 12345
  * 			public void call(InputStream in, OutputStream out) throws IOException {
- * 				out.write("ASync\n".getBytes());
+ * 				// This is just nonsens example code
+ * 				out.write("ASync\n".getBytes());//Sends a "ASync" to server
  * 				out.flush();// Force a flush if stream is buffered.
  * 				inBytes = new byte[1024];
  * 				// read just one chunk.
  * 				inLen = in.read(inBytes);
+ * 				System.out.println(new String(inBytes,0,inLen,"UTF-8"));
  * 			}// socket will be closed "automatically" (since out of scope)
  * 		});
  * <!--Code end-->
  * </pre>
  * 
- * <b>Listen on a Socket</b>
+ * <b>Listen on a socket</b>
  * 
  * <pre>
- * <!--Code start[doc.CodeExample1.startServer] [2F919828A8657BC8D663694B0E164421]-->
+ * <!--Code start[doc.CodeExample1.startServer] [E1E4A5F5AE3F5A92FBF907EC8CBB88AA]-->
  * 		// This creates a RemoteControll. To stop use remote.stop();
- * 		RemoteControll remote = new ASync().socket().listenOn(12345, new BufferedCharacterCallback("UTF-8") {
+ * 		RemoteControll remote = new ASync().socket().listenOn(12345,//Start listening on socket. RemoteControl makes it posible from oustide of ASync API to monitoring and close down service
+ * 				new BufferedCharacterCallback("UTF-8") {
  * 			public void call(BufferedReader reader, BufferedWriter writer) throws IOException {
  * 				String line;
- * 				while ((line = reader.readLine()) != null) {
- * 					writer.write(new StringBuffer(line).reverse().toString());
+ * 				while ((line = reader.readLine()) != null) {//Read a line
+ * 					writer.write(new StringBuffer(line).reverse().toString());//Send the readed line back to client
  * 					writer.flush();// Force a flush if stream is buffered.
  * 				}
  * 			}// socket will be closed "automatically" (since out of scope)
@@ -92,35 +97,46 @@ import async.net.thread.ThreadHandler;
  * </pre>
  * 
  * <p>
- * Instead of using IOCallback we use BufferedCharacterCallback witch extends
- * CharacterCallback that implements IOCallback and we have a buffered Writer
- * and reader.
+ * When starting a listener or a webserver it return a remote controll. It's
+ * used to check status of listener/webserver or close it.
+ * </p>
+ * <p>
+ * In this example BufferedCharacterCallback is used. Thats a type of IOCallback
+ * that has a buffered writer/reader.
  * </p>
  * 
  * <b>Start web server</b>
  * 
  * <pre>
- * <!--Code start[doc.CodeExample1.startWebServer] [51B253AC00EA458B0784E935F9588BC0]-->
- * 		new ASync().http().listen(12347, new HttpCallback() {
+ * <!--Code start[doc.CodeExample1.startWebServer] [EB6DF761EA0D51AA67C26E00534D7AA1]-->
+ * 		new ASync().http().listen(12347, new HttpCallback() {// Start a web server that listening on port 12347
  * 			public void call(HttpRequest request, HttpResponse response) throws IOException {
- * 				ASyncWriter writer = response.getWriter();
- * 				writer.write(request.getPath());
+ * 				// This is just nonsens example code
+ * 				ASyncWriter writer = response.getWriter();// Get a writer to response client.
+ * 				writer.write(request.getPath());// Get requested path and send it to client.
  * 				writer.write(" ");
- * 				writer.write(request.getQueryString());
+ * 				writer.write(request.getQueryString());// Gets query string and send it to client.
  * 				writer.flush();
  * 			}
  * 		});
  * <!--Code end-->
  * </pre>
  * 
- * <h2 id="2">Dispatcher</h2>
  * <p>
- * Dispatcher is used to dispatch requests. Dispatcher is a controller that
- * listen on inputStreams from all added callbacks and propagets it to all other
- * outputStreams.
+ * 
  * </p>
  * 
- * <b>Connect console to a Socket</b>
+ * <h2 id="2">Dispatcher</h2>
+ * <p>
+ * The Dispatcher is used to dispatch requests. A dispatcher is a controller
+ * that listen on inputStreams from all added callbacks and propagaters it to
+ * all other outputStreams.
+ * </p>
+ * 
+ * <b>Connect console to a socket</b>
+ * <p>
+ * Next example is a simple client to a chat server.
+ * </p>
  * 
  * <pre>
  * <!--Code start[doc.CodeExample1.startConsole] [177545C5BC22BBAF830C8EF1A50B3779]-->
@@ -131,7 +147,10 @@ import async.net.thread.ThreadHandler;
  * <!--Code end-->
  * </pre>
  * 
- * <b>Connect connection to all other connection(Simple chat server)</b>
+ * <b>Connect one connection to all other connections(Simple chat server)</b>
+ * <p>
+ * Next example is a simple chat server.
+ * </p>
  * 
  * <pre>
  * <!--Code start[doc.CodeExample1.startChatServer] [59DF404164DA7FDDB20264F9573AD08A]-->
@@ -142,11 +161,11 @@ import async.net.thread.ThreadHandler;
  * </pre>
  * 
  * <p>
- * Now we use createFactory method and that will create a new IOCallback for
- * every request. When connecting to a socket or console
- * <code>IOCallback.call</code> method is only called ones and when listening on
- * a socket <code>IOCallback.call</code> method is called for each request
- * therefore we need a factory that creates new IOCallbacks.
+ * In this example createFactory method is used which will create a new
+ * IOCallback for every request. When connecting to a socket or console
+ * <code>IOCallback.call</code> is only called once. When listening on a socket
+ * <code>IOCallback.call</code> is called for each request. Because of this, a
+ * factory is needed that creates new IOCallback for each new call.
  * </p>
  * <h2 id="3">3. Exceptions</h2>
  * <p>

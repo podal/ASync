@@ -39,11 +39,12 @@ public class CodeExample1 {
 
 	private void startServer() throws IOException {
 		// This creates a RemoteControll. To stop use remote.stop();
-		RemoteControll remote = new ASync().socket().listenOn(12345, new BufferedCharacterCallback("UTF-8") {
+		RemoteControll remote = new ASync().socket().listenOn(12345,//Start listening on socket. RemoteControl makes it posible from oustide of ASync API to monitoring and close down service
+				new BufferedCharacterCallback("UTF-8") {
 			public void call(BufferedReader reader, BufferedWriter writer) throws IOException {
 				String line;
-				while ((line = reader.readLine()) != null) {
-					writer.write(new StringBuffer(line).reverse().toString());
+				while ((line = reader.readLine()) != null) {//Read a line
+					writer.write(new StringBuffer(line).reverse().toString());//Send the readed line back to client
 					writer.flush();// Force a flush if stream is buffered.
 				}
 			}// socket will be closed "automatically" (since out of scope)
@@ -77,22 +78,25 @@ public class CodeExample1 {
 	}
 
 	private void startClient() throws IOException {
-		new ASync().socket().connectTo("127.0.0.1", 12345, new IOCallback() {
+		new ASync().socket().connectTo("127.0.0.1", 12345, new IOCallback() {// Connect to host 127.0.0.1 on port 12345
 			public void call(InputStream in, OutputStream out) throws IOException {
-				out.write("ASync\n".getBytes());
+				// This is just nonsens example code
+				out.write("ASync\n".getBytes());//Sends a "ASync" to server
 				out.flush();// Force a flush if stream is buffered.
 				inBytes = new byte[1024];
 				// read just one chunk.
 				inLen = in.read(inBytes);
+				System.out.println(new String(inBytes,0,inLen,"UTF-8"));
 			}// socket will be closed "automatically" (since out of scope)
 		});
 	}
 
 	public void startReverseConsole() {
-		new ASync().console().start(new IOCallback() {
+		new ASync().console().start(new IOCallback() {//Create new console
 			public void call(InputStream in, OutputStream out) throws IOException {
 				byte[] bs = new byte[1024];
 				int a;
+				//Get data from console input and send it to console output.
 				while ((a = in.read(bs)) != -1) {
 					out.write(bs, 0, a);				
 					out.flush();// Force a flush if stream is buffered. 
@@ -112,12 +116,13 @@ public class CodeExample1 {
 	}
 
 	public void startWebServer() throws IOException {
-		new ASync().http().listen(12347, new HttpCallback() {
+		new ASync().http().listen(12347, new HttpCallback() {// Start a web server that listening on port 12347
 			public void call(HttpRequest request, HttpResponse response) throws IOException {
-				ASyncWriter writer = response.getWriter();
-				writer.write(request.getPath());
+				// This is just nonsens example code
+				ASyncWriter writer = response.getWriter();// Get a writer to response client.
+				writer.write(request.getPath());// Get requested path and send it to client.
 				writer.write(" ");
-				writer.write(request.getQueryString());
+				writer.write(request.getQueryString());// Gets query string and send it to client.
 				writer.flush();
 			}
 		});
