@@ -34,21 +34,4 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>podal</groupId>
-				<artifactId>codeToJavaDocMvn</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
-				<executions>
-					<execution>
-						<phase>compile</phase>
-						<goals>
-							<goal>codeToJavaDoc</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
 </project>
