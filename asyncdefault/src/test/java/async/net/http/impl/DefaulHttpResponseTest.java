@@ -27,7 +27,7 @@ public class DefaulHttpResponseTest {
 		int i = string.indexOf("\r\n\r\n");
 		List<String> list = Arrays.asList(string.substring(0, i).split("\r\n"));
 		String string2 = string.substring(i + 4);
-		String[] ex = { "HTTP/1.0 200", "Content-Type: text/plain", "Content-Length: 4" };
+		String[] ex = { "HTTP/1.0 200", "Content-Type: text/html", "Content-Length: 4" };
 		List<String> exList = Arrays.asList(ex);
 
 		List<String> more = new ArrayList<String>(list);
