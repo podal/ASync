@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import async.net.ASync;
-import async.net.callback.HttpCallback;
+import async.net.callback.MethodAwareHttpCallback;
 import async.net.callback.PostParameterCollecter;
 import async.net.http.HttpRequest;
 import async.net.http.HttpResponse;
@@ -20,25 +20,25 @@ public class WebServer {
 		final List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		final VelocityHttpHandlerFactory handler = new VelocityHttpHandlerFactory("web").setDirDefault("index.vsl")
 				.setEncoding("UTF-8");
-		aSync.http().listen(8080, new HttpCallback() {
+		aSync.http().listen(8080, new MethodAwareHttpCallback() {
 			@Override
-			public void call(HttpRequest request, HttpResponse response) throws IOException {
-				if (request.getType().isPost()) {
-					request.setOutputStream(new PostParameterCollecter("UTF-8") {
-						@Override
-						public void requestFinish(Map<String, String> parameters) {
-							synchronized (list) {
-								list.add(parameters);
-							}
+			public void doPostCall(HttpRequest request, HttpResponse response) {
+				request.setOutputStream(new PostParameterCollecter("UTF-8") {
+					@Override
+					public void requestFinish(Map<String, String> parameters) {
+						synchronized (list) {
+							list.add(parameters);
 						}
-					});
-					response.sendRedirect("/index.vsl");
-				} else {
-					Map<String, Object> map = new HashMap<String, Object>();
-					map.put("info", list);
-					response.setEncoding("UTF-8");
-					handler.getHttpHandler(map).call(request, response);
-				}
+					}
+				});
+				response.sendRedirect("/index.vsl");
+			}
+			@Override
+			public void doGetCall(HttpRequest request, HttpResponse response) throws IOException {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("info", list);
+				response.setEncoding("UTF-8");
+				handler.getHttpHandler(map).call(request, response);
 			}
 		});
 	}
