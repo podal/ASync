@@ -14,6 +14,7 @@ import async.net.http.HttpResponse;
 
 public class DefaulHttpResponse implements HttpResponse {
 
+	private static final String DEFAULT_CONTETN_TYPE = "text/html";
 	private static final char[] NEW_LINE = { '\r', '\n' };
 	private OutputStream out;
 	private int code = 200;
@@ -24,7 +25,7 @@ public class DefaulHttpResponse implements HttpResponse {
 
 	public DefaulHttpResponse(OutputStream out) {
 		this.out = out;
-		headers.put(CONTENT_TYPE, "text/plain");
+		headers.put(CONTENT_TYPE, DEFAULT_CONTETN_TYPE);
 	}
 
 	@Override
