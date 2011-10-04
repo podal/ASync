@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -19,7 +20,11 @@ import async.net.callback.ExceptionCallback;
 import async.net.callback.ExitCallback;
 import async.net.callback.HttpCallback;
 import async.net.callback.IOCallback;
+import async.net.callback.MethodAwareHttpCallback;
+import async.net.callback.PageAwareHttpCallback;
+import async.net.callback.PostParameterCollecter;
 import async.net.http.ASyncWriter;
+import async.net.http.HttpHeader;
 import async.net.http.HttpRequest;
 import async.net.http.HttpResponse;
 import async.net.thread.ThreadHandler;
@@ -128,6 +133,49 @@ public class CodeExample1 {
 		});
 	}
 
+	public void webServerPath() throws IOException {
+		new ASync().http().listen(12348,new PageAwareHttpCallback().// Start a web server that listening on port 12348
+		addPage("/", new HttpCallback() {//Add httpCallback for page '/'
+			public void call(HttpRequest request, HttpResponse response) throws IOException {
+				ASyncWriter writer = response.getWriter();
+				writer.write("StartPage");
+				writer.flush();				
+			}
+		}).
+		addPage("/page2", new HttpCallback() {//Add httpCallback for page 'page2'
+			public void call(HttpRequest request, HttpResponse response) throws IOException {
+				ASyncWriter writer = response.getWriter();
+				writer.write("Page2");
+				writer.flush();				
+			}
+		}).addDefault(new HttpCallback() {//Add httpCallback for all other page
+			public void call(HttpRequest request, HttpResponse response) throws IOException {
+				response.setReturnCode(404);
+				ASyncWriter writer = response.getWriter();
+				writer.write(String.format("File '%s' not found.", request.getPath()));
+				writer.flush();				
+			}
+		}));
+	}
+
+	public void webServerMethod() throws IOException {
+		new ASync().http().listen(12349,new MethodAwareHttpCallback() {// Start a web server that listening on port 12349
+			public void doPostCall(HttpRequest request, final HttpResponse response) throws IOException {
+				request.setOutputStream(new PostParameterCollecter("UTF-8") {
+					public void requestFinish(Map<String, String> parameters) {// Called when request is done.
+						try {
+							response.getWriter().print(parameters);
+						} catch (IOException e) {
+						}
+					}
+				});
+			}
+			public void doGetCall(HttpRequest request, HttpResponse response) throws IOException {
+				response.getWriter().print("<form method=\"post\"><input type=\"input\" name=\"name\"><input type=\"submit\"></form>");
+			}
+		});
+	}
+	
 	public void doExceptionCallback() throws IOException {
 		new ASync().exception(new ExceptionCallback<IOException>() {
 			public void exception(IOException exception) {

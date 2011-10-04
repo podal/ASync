@@ -105,7 +105,7 @@ import async.net.thread.ThreadHandler;
  * that has a buffered writer/reader.
  * </p>
  * 
- * <b>Start web server</b>
+ * <b>Web server</b>
  * 
  * <pre>
  * <!--Code start[doc.CodeExample1.startWebServer] [257A2A072787C8F45A9D5EA447505F21]-->
@@ -122,10 +122,66 @@ import async.net.thread.ThreadHandler;
  * <!--Code end-->
  * </pre>
  * 
+ * <b>Web server with pages</b>
+ * 
+ * <pre>
+ * <!--Code start[doc.CodeExample1.webServerPath] [8DC0DCC5017D345E12C660A9B2A33683]-->
+ * 		new ASync().http().listen(12348,new PageAwareHttpCallback().// Start a web server that listening on port 12348
+ * 		addPage("/", new HttpCallback() {//Add httpCallback for page '/'
+ * 			public void call(HttpRequest request, HttpResponse response) throws IOException {
+ * 				ASyncWriter writer = response.getWriter();
+ * 				writer.write("StartPage");
+ * 				writer.flush();				
+ * 			}
+ * 		}).
+ * 		addPage("/page2", new HttpCallback() {//Add httpCallback for page 'page2'
+ * 			public void call(HttpRequest request, HttpResponse response) throws IOException {
+ * 				ASyncWriter writer = response.getWriter();
+ * 				writer.write("Page2");
+ * 				writer.flush();				
+ * 			}
+ * 		}).addDefault(new HttpCallback() {//Add httpCallback for all other page
+ * 			public void call(HttpRequest request, HttpResponse response) throws IOException {
+ * 				response.setReturnCode(404);
+ * 				ASyncWriter writer = response.getWriter();
+ * 				writer.write(String.format("File '%s' not found.", request.getPath()));
+ * 				writer.flush();				
+ * 			}
+ * 		}));
+ * <!--Code end-->
+ * </pre>
+ * 
+ * <b>Web server with method[POST/GET]</b>
+ * 
+ * <pre>
+ * <!--Code start[doc.CodeExample1.webServerMethod] [2941842106F84DE15452BD70AA719E70]-->
+ * 		new ASync().http().listen(12349,new MethodAwareHttpCallback() {// Start a web server that listening on port 12349
+ * 			public void doPostCall(HttpRequest request, final HttpResponse response) throws IOException {
+ * 				request.setOutputStream(new PostParameterCollecter("UTF-8") {
+ * 					public void requestFinish(Map<String, String> parameters) {// Called when request is done.
+ * 						try {
+ * 							response.getWriter().print(parameters);
+ * 						} catch (IOException e) {
+ * 						}
+ * 					}
+ * 				});
+ * 			}
+ * 			public void doGetCall(HttpRequest request, HttpResponse response) throws IOException {
+ * 				response.getWriter().print("<form method=\"post\"><input type=\"input\" name=\"name\"><input type=\"submit\"></form>");
+ * 			}
+ * 		});
+ * <!--Code end-->
+ * </pre>
  * <p>
- * 
+ * All post data is fetch by a <code>OutputStream</code> and it's closed when
+ * request is done. To fetch post parameter use
+ * <code>PostParameterFetcher</code> thats a <code>OutputStream</code> thats for
+ * each post parameter calls <code>addParameter</code> and at the end of request
+ * <code>requestFinish</code> is called. In this example
+ * <code>PostParameterCollecter</code> is used. Thats a fetcher of post
+ * parameter. It's a type of <code>PostParameterFetcher</code> that only returns
+ * all post data as a map when request is done.
  * </p>
- * 
  * <h2 id="2">2. Dispatcher</h2>
  * <p>
  * The Dispatcher is used to dispatch requests. A dispatcher is a controller

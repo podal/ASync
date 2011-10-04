@@ -29,7 +29,6 @@ public class WebMethodExample {
 
 			@Override
 			public void doGetCall(HttpRequest request, HttpResponse response) throws IOException {
-				response.setHeader(HttpHeader.CONTENT_TYPE, "text/html");
 				response.getWriter().print("<form method=\"post\"><input type=\"input\" name=\"name\"><input type=\"submit\"></form>");
 			}
 		});
