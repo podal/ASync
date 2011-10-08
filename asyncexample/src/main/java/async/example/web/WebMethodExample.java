@@ -13,7 +13,7 @@ import async.net.http.HttpResponse;
 
 public class WebMethodExample {
 	public static void main(String[] args) throws IOException {
-		new ASync().http().listen(12345, new MethodAwareHttpCallback().addPage(HTTPType.GET, new HttpCallback() {
+		new ASync().http().listen(12345, new MethodAwareHttpCallback().add(HTTPType.GET, new HttpCallback() {
 			@Override
 			public void call(HttpRequest request, final HttpResponse response) throws IOException {
 				request.setOutputStream(new PostParameterCollecter("UTF-8") {

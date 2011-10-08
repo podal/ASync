@@ -23,7 +23,7 @@ public class WebServer {
 		final List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		final VelocityHttpHandlerFactory handler = new VelocityHttpHandlerFactory("web").setDirDefault("index.vsl")
 				.setEncoding("UTF-8");
-		aSync.http().listen(8080, new MethodAwareHttpCallback().addPage(HTTPType.POST, new HttpCallback() {
+		aSync.http().listen(8080, new MethodAwareHttpCallback().add(HTTPType.POST, new HttpCallback() {
 			@Override
 			public void call(HttpRequest request, HttpResponse response) throws IOException {
 				request.setOutputStream(new PostParameterCollecter("UTF-8") {

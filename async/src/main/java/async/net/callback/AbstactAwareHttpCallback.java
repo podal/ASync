@@ -29,7 +29,7 @@ public abstract class AbstactAwareHttpCallback<T> implements HttpCallback {
 
 	public abstract T getKey(HttpRequest request, HttpResponse response);
 	
-	public AbstactAwareHttpCallback<T> addPage(T page, HttpCallback httpCallback) {
+	public AbstactAwareHttpCallback<T> add(T page, HttpCallback httpCallback) {
 		pages.put(page, httpCallback);
 		return this;
 	}

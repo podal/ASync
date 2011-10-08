@@ -135,14 +135,14 @@ public class CodeExample1 {
 
 	public void webServerPath() throws IOException {
 		new ASync().http().listen(12348,new PageAwareHttpCallback().// Start a web server that listening on port 12348
-		addPage("/", new HttpCallback() {//Add httpCallback for page '/'
+		add("/", new HttpCallback() {//Add httpCallback for page '/'
 			public void call(HttpRequest request, HttpResponse response) throws IOException {
 				PrintWriter writer = response.getWriter();
 				writer.write("StartPage");
 				writer.flush();				
 			}
 		}).
-		addPage("/page2", new HttpCallback() {//Add httpCallback for page 'page2'
+		add("/page2", new HttpCallback() {//Add httpCallback for page 'page2'
 			public void call(HttpRequest request, HttpResponse response) throws IOException {
 				PrintWriter writer = response.getWriter();
 				writer.write("Page2");
@@ -160,7 +160,7 @@ public class CodeExample1 {
 
 	public void webServerMethod() throws IOException {
 		new ASync().http().listen(12349,new MethodAwareHttpCallback()
-		.addPage(HTTPType.POST, new HttpCallback() {
+		.add(HTTPType.POST, new HttpCallback() {
 			public void call(HttpRequest request, final HttpResponse response) throws IOException {
 				request.setOutputStream(new PostParameterCollecter("UTF-8") {
 					public void requestFinish(Map<String, String> parameters) {// Called when request is done.
