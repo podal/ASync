@@ -6,11 +6,8 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
-import async.net.http.ASyncWriter;
+public class DefalultASyncWriter extends Writer {
 
-public class DefalultASyncWriter extends ASyncWriter {
-
-	private static final char[] LINE_SEPARATOR = { '\n' };
 	private Writer writer;
 	private boolean started = false;
 
@@ -44,24 +41,6 @@ public class DefalultASyncWriter extends ASyncWriter {
 	public void write(char[] chars, int start, int end) throws IOException {
 		started = true;
 		writer.write(chars, start, end);
-	}
-
-	public void print(Object obj) throws IOException {
-		started = true;
-		if (obj == null) {
-			write("null");
-		} else {
-			write(obj.toString());
-		}
-	}
-
-	public void println(Object obj) throws IOException {
-		print(obj);
-		println();
-	}
-
-	public void println() throws IOException {
-		write(LINE_SEPARATOR, 0, LINE_SEPARATOR.length);
 	}
 
 	public boolean isStaerted() {

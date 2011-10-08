@@ -108,11 +108,11 @@ import async.net.thread.ThreadHandler;
  * <b>Web server</b>
  * 
  * <pre>
- * <!--Code start[doc.CodeExample1.startWebServer] [257A2A072787C8F45A9D5EA447505F21]-->
+ * <!--Code start[doc.CodeExample1.startWebServer] [17272C1DC50FAD6227BACF6FF7804E11]-->
  * 		new ASync().http().listen(12347, new HttpCallback() {// Start a web server that listening on port 12347
  * 			public void call(HttpRequest request, HttpResponse response) throws IOException {
  * 				// This is just nonsense example code
- * 				ASyncWriter writer = response.getWriter();// Get a writer to response client.
+ * 				PrintWriter writer = response.getWriter();// Get a writer to response client.
  * 				writer.write(request.getPath());// Get requested path and send it to client.
  * 				writer.write(" ");
  * 				writer.write(request.getQueryString());// Gets query string and send it to client.
@@ -125,25 +125,25 @@ import async.net.thread.ThreadHandler;
  * <b>Web server with pages</b>
  * 
  * <pre>
- * <!--Code start[doc.CodeExample1.webServerPath] [8DC0DCC5017D345E12C660A9B2A33683]-->
+ * <!--Code start[doc.CodeExample1.webServerPath] [1E1C4CF7A0258657A260A8100F47AB6B]-->
  * 		new ASync().http().listen(12348,new PageAwareHttpCallback().// Start a web server that listening on port 12348
  * 		addPage("/", new HttpCallback() {//Add httpCallback for page '/'
  * 			public void call(HttpRequest request, HttpResponse response) throws IOException {
- * 				ASyncWriter writer = response.getWriter();
+ * 				PrintWriter writer = response.getWriter();
  * 				writer.write("StartPage");
  * 				writer.flush();				
  * 			}
  * 		}).
  * 		addPage("/page2", new HttpCallback() {//Add httpCallback for page 'page2'
  * 			public void call(HttpRequest request, HttpResponse response) throws IOException {
- * 				ASyncWriter writer = response.getWriter();
+ * 				PrintWriter writer = response.getWriter();
  * 				writer.write("Page2");
  * 				writer.flush();				
  * 			}
  * 		}).addDefault(new HttpCallback() {//Add httpCallback for all other page
  * 			public void call(HttpRequest request, HttpResponse response) throws IOException {
  * 				response.setReturnCode(404);
- * 				ASyncWriter writer = response.getWriter();
+ * 				PrintWriter writer = response.getWriter();
  * 				writer.write(String.format("File '%s' not found.", request.getPath()));
  * 				writer.flush();				
  * 			}
@@ -154,22 +154,21 @@ import async.net.thread.ThreadHandler;
  * <b>Web server with method[POST/GET]</b>
  * 
  * <pre>
- * <!--Code start[doc.CodeExample1.webServerMethod] [2941842106F84DE15452BD70AA719E70]-->
- * 		new ASync().http().listen(12349,new MethodAwareHttpCallback() {// Start a web server that listening on port 12349
- * 			public void doPostCall(HttpRequest request, final HttpResponse response) throws IOException {
+ * <!--Code start[doc.CodeExample1.webServerMethod] [03CF17528FFD55DB12BD5855E3A38ABF]-->
+ * 		new ASync().http().listen(12349,new MethodAwareHttpCallback()
+ * 		.addPage(HTTPType.POST, new HttpCallback() {
+ * 			public void call(HttpRequest request, final HttpResponse response) throws IOException {
  * 				request.setOutputStream(new PostParameterCollecter("UTF-8") {
  * 					public void requestFinish(Map<String, String> parameters) {// Called when request is done.
- * 						try {
  * 							response.getWriter().print(parameters);
- * 						} catch (IOException e) {
- * 						}
  * 					}
  * 				});
  * 			}
- * 			public void doGetCall(HttpRequest request, HttpResponse response) throws IOException {
+ * 		}).addDefault(new HttpCallback() {
+ * 			public void call(HttpRequest request, HttpResponse response) throws IOException {
  * 				response.getWriter().print("<form method=\"post\"><input type=\"input\" name=\"name\"><input type=\"submit\"></form>");
  * 			}
- * 		});
+ * 		}));
  * <!--Code end-->
  * </pre>
  * <p>

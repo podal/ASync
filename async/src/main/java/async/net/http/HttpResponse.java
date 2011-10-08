@@ -1,6 +1,7 @@
 package async.net.http;
 
 import java.io.OutputStream;
+import java.io.PrintWriter;
 
 public interface HttpResponse {
 
@@ -8,7 +9,7 @@ public interface HttpResponse {
 
 	OutputStream getOutputStream();
 
-	ASyncWriter getWriter();
+	PrintWriter getWriter();
 
 	void sendRedirect(String url);
 

@@ -57,7 +57,7 @@ public class ClassPathHttpHandler implements HttpCallback {
 	}
 
 	@Override
-	public void call(HttpRequest request, final HttpResponse response) throws IOException {
+	public void call(final HttpRequest request, final HttpResponse response) throws IOException {
 		ResponseParser.parse(request.getPath(), new ResponseInfo() {
 
 			@Override
@@ -83,7 +83,7 @@ public class ClassPathHttpHandler implements HttpCallback {
 				}
 				response.setHeader(HttpHeader.CONTENT_TYPE, contentType);
 				response.setReturnCode(200);
-				copy(response, extention, stream);
+				copy(request,response, extention, stream);
 			}
 
 			@Override
@@ -93,7 +93,7 @@ public class ClassPathHttpHandler implements HttpCallback {
 		});
 	}
 
-	protected void copy(HttpResponse response, String extention, InputStream stream) throws IOException {
+	protected void copy(HttpRequest request, HttpResponse response, String extention, InputStream stream) throws IOException {
 		IOUtil.copy(stream, response.getOutputStream());
 	}
 

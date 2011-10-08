@@ -9,7 +9,6 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-import async.net.http.ASyncWriter;
 import async.net.http.HttpResponse;
 
 public class DefaulHttpResponse implements HttpResponse {
@@ -20,8 +19,9 @@ public class DefaulHttpResponse implements HttpResponse {
 	private int code = 200;
 	protected HttpResponseOutputStream responseOut;
 	private Map<String, String> headers = new HashMap<String, String>();
-	private DefalultASyncWriter writer;
+	private PrintWriter writer;
 	private String encoding = "ISO-8859-1";
+	private DefalultASyncWriter writerInt;
 
 	public DefaulHttpResponse(OutputStream out) {
 		this.out = out;
@@ -95,16 +95,16 @@ public class DefaulHttpResponse implements HttpResponse {
 	}
 
 	@Override
-	public ASyncWriter getWriter() {
+	public PrintWriter getWriter() {
 		if (writer == null) {
-			writer = new DefalultASyncWriter(getOutputStream(), encoding);
+			writer = new PrintWriter(writerInt = new DefalultASyncWriter(getOutputStream(), encoding));
 		}
 		return writer;
 	}
 
 	@Override
 	public void sendRedirect(String url) {
-		if (isFlush() || (responseOut != null && responseOut.isStarted()) || (writer != null && writer.isStaerted())) {
+		if (isFlush() || (responseOut != null && responseOut.isStarted()) || (writer != null && writerInt.isStaerted())) {
 			throw new IllegalStateException("Can't use 'sendRedirect' when started a stream/writer.");
 		}
 		setHeader("Location", url);

@@ -1,9 +1,9 @@
 package async.net;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import async.net.callback.HttpCallback;
-import async.net.http.ASyncWriter;
 import async.net.http.HttpRequest;
 import async.net.http.HttpResponse;
 
@@ -14,7 +14,7 @@ public class AsyncMain {
 			@Override
 			public void call(HttpRequest request, HttpResponse response) throws IOException {
 				response.setReturnCode(200);
-				ASyncWriter writer = response.getWriter();
+				PrintWriter writer = response.getWriter();
 				writer.println("Test");
 				writer.println();
 				writer.println(request.getType());

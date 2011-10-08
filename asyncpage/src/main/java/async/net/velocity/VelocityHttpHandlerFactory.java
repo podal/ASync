@@ -11,6 +11,8 @@ import org.apache.velocity.runtime.RuntimeConstants;
 
 import async.net.callback.HttpCallback;
 import async.net.http.ClassPathHttpHandler;
+import async.net.http.HttpRequest;
+import async.net.http.HttpResponse;
 
 public class VelocityHttpHandlerFactory {
 
@@ -53,8 +55,17 @@ public class VelocityHttpHandlerFactory {
 		return this;
 	}
 
-	public HttpCallback getHttpHandler(Map<String, Object> objects) {
-		return new VelocityHttpHandler(engine, pathPrefix, dirDefault, includeExtentions, objects, encoding);
+	public HttpCallback getHttpHandler(final Map<String, Object> objects) {
+		return new VelocityHttpHandler(engine, pathPrefix, dirDefault, includeExtentions, new VelocityMapFetcher() {
+			@Override
+			public Map<String, Object> getMap(HttpRequest request, HttpResponse response) {
+				return objects;
+			}
+		}, encoding);
+	}
+
+	public HttpCallback createCallback(VelocityMapFetcher fetcher) {
+		return new VelocityHttpHandler(engine, pathPrefix, dirDefault, includeExtentions, fetcher, encoding);
 	}
 
 }
