@@ -38,13 +38,13 @@ public class WebServer {
 			}
 		}).addDefault(handler.createCallback(new VelocityMapFetcher() {
 			@Override
-			public Map<String,Object> getMap(HttpRequest request, HttpResponse response) {
+			public Map<String, Object> getMap(HttpRequest request, HttpResponse response) {
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("info", list);
-				return map; 
+				return map;
 			}
 		})));
-		
-			}
+
+	}
 
 }
