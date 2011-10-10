@@ -64,7 +64,7 @@ public class VelocityHttpHandlerFactory {
 		}, encoding);
 	}
 
-	public HttpCallback createCallback(VelocityMapFetcher fetcher) {
+	public HttpCallback createCallback(VelocityModelAndViewFetcher fetcher) {
 		return new VelocityHttpHandler(engine, pathPrefix, dirDefault, includeExtentions, fetcher, encoding);
 	}
 

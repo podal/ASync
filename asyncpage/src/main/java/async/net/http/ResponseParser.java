@@ -4,19 +4,21 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class ResponseParser {
-	public interface ResponseInfo {
+	public interface ResponseInfo<MV> {
 		void doDirectory(String path);
 
-		void doFile(String path, String extention, InputStream stream) throws IOException;
+		void doFile(String extention, InputStream stream) throws IOException;
 
 		void doNotFound(String path) throws IOException;
 
 		String getPathPrefix();
+		
+		String getView(MV modelView);
 
 	}
 
-	public static void parse(String url, ResponseInfo response2) throws IOException {
-		String path = url.replace("..", "");
+	public static <MV> void parse(MV modelView, ResponseInfo<MV> response2) throws IOException {
+		String path = response2.getView(modelView).replace("..", "");
 		if (!path.startsWith("/")) {
 			path = '/' + path;
 		}
@@ -33,7 +35,7 @@ public class ResponseParser {
 			if ((stream = ClassLoader.getSystemResourceAsStream(classPath)) == null) {
 				response2.doNotFound(path);
 			} else {
-				response2.doFile(path, extention, stream);
+				response2.doFile(extention, stream);
 			}
 		}
 	}

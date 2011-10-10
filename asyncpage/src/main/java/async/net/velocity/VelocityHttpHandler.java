@@ -11,19 +11,19 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.context.Context;
 
-import async.net.http.ClassPathHttpHandler;
+import async.net.http.AbstarctClassPathHttpHandler;
 import async.net.http.HttpRequest;
 import async.net.http.HttpResponse;
 
-public class VelocityHttpHandler extends ClassPathHttpHandler {
+public class VelocityHttpHandler extends AbstarctClassPathHttpHandler<ModelAndView> {
 
 	private VelocityEngine engine;
 	private Set<String> includeExtentions;
-	private VelocityMapFetcher fetcher;
+	private VelocityModelAndViewFetcher fetcher;
 	private String encoding;
 
 	VelocityHttpHandler(VelocityEngine engine, String pathPrefix, String dirDefault, Set<String> includeExtentions,
-			VelocityMapFetcher fetcher, String encoding) {
+			VelocityModelAndViewFetcher fetcher, String encoding) {
 		super(pathPrefix, dirDefault);
 		this.engine = engine;
 		this.includeExtentions = includeExtentions;
@@ -36,7 +36,7 @@ public class VelocityHttpHandler extends ClassPathHttpHandler {
 			throws IOException {
 		if (includeExtentions.contains(extention)) {
 			Context context = new VelocityContext();
-			Map<String, Object> model = fetcher.getMap(request, response);
+			Map<String, Object> model = fetcher.getModelAndView(request, response).getModel();
 			response.setEncoding(encoding);
 			for (Entry<String, Object> en : model.entrySet()) {
 				context.put(en.getKey(), en.getValue());
@@ -45,6 +45,16 @@ public class VelocityHttpHandler extends ClassPathHttpHandler {
 		} else {
 			super.copy(request, response, extention, stream);
 		}
+	}
+
+	@Override
+	protected String getView(ModelAndView modelView) {
+		return modelView.getView();
+	}
+
+	@Override
+	public ModelAndView getModelAndView(HttpRequest request, HttpResponse response) {
+		return fetcher.getModelAndView(request, response);
 	}
 
 }

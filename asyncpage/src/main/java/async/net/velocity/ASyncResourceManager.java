@@ -35,14 +35,14 @@ public class ASyncResourceManager extends ResourceManagerImpl {
 			} else {
 				contentResource = new Template();
 			}
-			ResponseParser.parse(url, new ResponseInfo() {
+			ResponseParser.parse(url, new ResponseInfo<String>() {
 				@Override
 				public void doNotFound(String path) throws IOException {
 					throw new RuntimeException("Can't find path=" + path);
 				}
 
 				@Override
-				public void doFile(String path, String extention, InputStream stream) throws IOException {
+				public void doFile(String extention, InputStream stream) throws IOException {
 					list.add(stream);
 				}
 
@@ -53,6 +53,11 @@ public class ASyncResourceManager extends ResourceManagerImpl {
 				@Override
 				public String getPathPrefix() {
 					return handler.getPathPrefix();
+				}
+
+				@Override
+				public String getView(String modelView) {
+					return modelView;
 				}
 			});
 			contentResource.setResourceLoader(new ResourceLoader() {
